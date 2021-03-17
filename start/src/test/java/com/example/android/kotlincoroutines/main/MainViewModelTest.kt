@@ -20,18 +20,32 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.android.kotlincoroutines.fakes.MainNetworkFake
 import com.example.android.kotlincoroutines.fakes.TitleDaoFake
 import com.example.android.kotlincoroutines.main.utils.MainCoroutineScopeRule
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 class MainViewModelTest {
+
+    /**
+    * a custom rule in this codebase that configures Dispatchers.
+    * Main to use a TestCoroutineDispatcher from kotlinx-coroutines-test.
+    * This allows tests to advance a virtual-clock for testing, and allows code
+    * to use Dispatchers.Main in unit tests.
+    */
+    @ExperimentalCoroutinesApi
     @get:Rule
     val coroutineScope = MainCoroutineScopeRule()
+
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     lateinit var subject: MainViewModel
 
+    /**
+     * these are fake implementations of the network and database provided in the starter code
+     * to help write tests without using the real network or database.
+     */
     @Before
     fun setup() {
         subject = MainViewModel(
